@@ -146,6 +146,11 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		}
 	}
 
+	public void importSavedCommands(List<DriverCommand> commandList){
+		commandManager.setCurrentCommand(commandList, "Saved commands");
+		updatePanelPreview(commandList);
+	}
+
 	public void updateCurrentCommandField() {
 		currentCommandField.setText(commandManager.getCurrentCommandString());
 	}

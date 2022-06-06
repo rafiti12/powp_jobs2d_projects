@@ -2,8 +2,6 @@ package edu.kis.powp.jobs2d;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,9 +13,8 @@ import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
 import edu.kis.powp.jobs2d.command.visitor.CommandCountingVisitor;
 import edu.kis.powp.jobs2d.drivers.DriverComposite;
-import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.drivers.decorators.CommandUsageMonitorDecorator;
+import edu.kis.powp.jobs2d.drivers.decorators.CommandUsageRecorderDecorator;
 import edu.kis.powp.jobs2d.drivers.decorators.Job2dDriverUsageMonitorDecorator;
 import edu.kis.powp.jobs2d.drivers.gui.DriverUpdateInfoObserver;
 import edu.kis.powp.jobs2d.events.*;
@@ -57,13 +54,6 @@ public class TestJobs2dApp {
 
 	}
 
-	private static void setupRecorder(Application application) {
-		application.addTest("Start Recording", new SelectRecorderOptionListener(RecordingMacro.RecordingOperation.START));
-		application.addTest("Stop Recording", new SelectRecorderOptionListener(RecordingMacro.RecordingOperation.STOP));
-		application.addTest("Clear Recording", new SelectRecorderOptionListener(RecordingMacro.RecordingOperation.CLEAR));
-		application.addTest("Draw Recorded", new SelectRecorderOptionListener(RecordingMacro.RecordingOperation.DRAW));
-	}
-
 	private static void setupVisitors(Application application) {
 		application.addTest("Commands Counting Visitor", new SelectCommandsCountingVisitorOptionListner(logger, new CommandCountingVisitor(logger)));
 	}
@@ -89,13 +79,15 @@ public class TestJobs2dApp {
 		DriverFeature.addDriver("Line Simulator", driver);
 		driverComposite.addDriver(driver);
 
-		DriverFeature.addDriver("Line Simulator with monitor", new CommandUsageMonitorDecorator(new Job2dDriverUsageMonitorDecorator(driver)));
+		DriverFeature.addDriver("Line Simulator with monitor", new Job2dDriverUsageMonitorDecorator(driver));
+		DriverFeature.addDriver("Line Simulator with recorder", new CommandUsageRecorderDecorator(driver));
 
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
 		driverComposite.addDriver(driver);
 
-		DriverFeature.addDriver("Special line Simulator with monitor", new CommandUsageMonitorDecorator(new Job2dDriverUsageMonitorDecorator(driver)));
+		DriverFeature.addDriver("Special line Simulator with monitor", new Job2dDriverUsageMonitorDecorator(driver));
+		DriverFeature.addDriver("Special line Simulator with recorder", new CommandUsageRecorderDecorator(driver));
 	}
 
 	private static void setupWindows(Application application) {
@@ -146,7 +138,6 @@ public class TestJobs2dApp {
 				setupLogger(app);
 				setupWindows(app);
 				setupVisitors(app);
-				setupRecorder(app);
 
 				DrawOnFreePanelFeature.setupButtonClick(app, DriverFeature.getDriverManager());
 				app.setVisibility(true);

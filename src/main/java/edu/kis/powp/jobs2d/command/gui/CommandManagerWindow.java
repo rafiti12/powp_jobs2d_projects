@@ -11,23 +11,16 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileSystemView;
 
-import edu.kis.legacy.drawer.panel.DrawPanelController;
-import edu.kis.legacy.drawer.panel.DrawPanelUI;
-import edu.kis.legacy.drawer.shape.line.BasicLine;
-import edu.kis.powp.appbase.Application;
 import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.ICompoundCommand;
 import edu.kis.powp.jobs2d.command.file.IImportCommand;
 import edu.kis.powp.jobs2d.command.file.ImporterFactory;
 import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
-import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.features.CommandsFeature;
-import edu.kis.powp.jobs2d.features.DriverFeature;
+import edu.kis.powp.jobs2d.features.RecordingMacro;
 import edu.kis.powp.observer.Subscriber;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
@@ -109,12 +102,23 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		c.gridwidth = 1;
 		content.add(btnImportCommand, c);
 
+		JButton btnImportRecordedCommand = new JButton("Import recorded command");
+		btnImportRecordedCommand.addActionListener((ActionEvent e) -> this.importRecordedCommands());
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.gridx = 0;
+		c.gridy = 3;
+		c.weighty = 1;
+		c.gridheight = 1;
+		c.gridwidth = 1;
+		content.add(btnImportRecordedCommand, c);
+
 		JButton btnClearCommand = new JButton("Clear command");
 		btnClearCommand.addActionListener((ActionEvent e) -> this.clearCommand());
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 4;
 		c.weighty = 1;
 		c.gridheight = 1;
 		c.gridwidth = 1;
@@ -125,7 +129,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1;
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 5;
 		c.weighty = 1;
 		c.gridheight = 1;
 		c.gridwidth = 1;
@@ -169,9 +173,11 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 		}
 	}
 
-	public void importSavedCommands(List<DriverCommand> commandList){
+	private void importRecordedCommands() {
+		RecordingMacro recordingMacro = RecordingMacro.getInstance();
+		List<DriverCommand> commandList = recordingMacro.getCommandList();
 		commandManager.setCurrentCommand(commandList, "Saved commands");
-		updatePanelPreview(commandList);
+	}
 
 	public void previewCommand() {
 		StringBuilder builder = new StringBuilder();

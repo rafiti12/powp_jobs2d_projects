@@ -9,8 +9,10 @@ import java.util.List;
 public final class RecordingMacro {
 
 	private static RecordingMacro instance;
+	private final List<DriverCommand> commandList;
 
-	public static RecordingMacro getInstance() {
+
+	public synchronized static RecordingMacro getInstance() {
 		if (instance == null) {
 			instance = new RecordingMacro();
 		}
@@ -18,35 +20,16 @@ public final class RecordingMacro {
 	}
 
 	private RecordingMacro() {
-	}
-
-	public enum RecordingOperation {
-		START, STOP, CLEAR, DRAW
-	}
-
-	private final List<DriverCommand> commandList = new ArrayList<>();
-	private boolean isRecording = false;
-
-	public void start() {
-		isRecording = true;
-	}
-
-	public void stop() {
-		isRecording = false;
-	}
-
-	public void clear() {
-		commandList.clear();
+		commandList = new ArrayList<>();
 	}
 
 	public void save(DriverCommand driver) {
-		if (isRecording) {
-			commandList.add(driver);
-		}
+		commandList.add(driver);
+
 	}
 
-	public void draw() {
-		CommandManagerWindow commandManager = new CommandManagerWindow(CommandsFeature.getDriverCommandManager());
-		commandManager.importSavedCommands(commandList);
+	public List<DriverCommand> getCommandList() {
+		return commandList;
 	}
+
 }

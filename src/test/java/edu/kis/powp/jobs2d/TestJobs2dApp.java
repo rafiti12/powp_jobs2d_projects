@@ -14,7 +14,7 @@ import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver
 import edu.kis.powp.jobs2d.command.visitor.CommandCountingVisitor;
 import edu.kis.powp.jobs2d.drivers.DriverComposite;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.drivers.decorators.CommandUsageRecorderDecorator;
+import edu.kis.powp.jobs2d.drivers.decorators.CommandRecorderDriverDecorator;
 import edu.kis.powp.jobs2d.drivers.decorators.Job2dDriverUsageMonitorDecorator;
 import edu.kis.powp.jobs2d.drivers.gui.DriverUpdateInfoObserver;
 import edu.kis.powp.jobs2d.events.*;
@@ -80,14 +80,14 @@ public class TestJobs2dApp {
 		driverComposite.addDriver(driver);
 
 		DriverFeature.addDriver("Line Simulator with monitor", new Job2dDriverUsageMonitorDecorator(driver));
-		DriverFeature.addDriver("Line Simulator with recorder", new CommandUsageRecorderDecorator(driver));
+		DriverFeature.addDriver("Line Simulator with recorder", new CommandRecorderDriverDecorator(driver));
 
 		driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 		DriverFeature.addDriver("Special line Simulator", driver);
 		driverComposite.addDriver(driver);
 
 		DriverFeature.addDriver("Special line Simulator with monitor", new Job2dDriverUsageMonitorDecorator(driver));
-		DriverFeature.addDriver("Special line Simulator with recorder", new CommandUsageRecorderDecorator(driver));
+		DriverFeature.addDriver("Special line Simulator with recorder", new CommandRecorderDriverDecorator(driver));
 	}
 
 	private static void setupWindows(Application application) {

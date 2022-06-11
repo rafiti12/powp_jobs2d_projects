@@ -1,7 +1,6 @@
 package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.jobs2d.command.DriverCommand;
-import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 
 import java.util.ArrayList;
 import java.util.List;
